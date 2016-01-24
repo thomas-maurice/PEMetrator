@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}CAs{% endblock title %}
+
+{% block body %}
+    <div class="col-md-10 col-md-offset-1">
+        <h1><i class="fa fa-pencil"></i> Certification Authorities
+            {% if user.is_staff %}
+                <small>
+                    <a class="btn btn-primary pull-right" href="{% url 'create_certification_authority' %}">
+                        <i class="fa fa-plus"></i> Create one</a>
+                </small>
+            {%endif%}
+        </h1>
+        {% for ca in object_list %}
+            <h3>{{ca.common_name}}
+                <small class='pull-right'>
+                {% if ca.status == 'VALID' %}
+                <span class="label label-success">{{ca.status}}</span>
+                {% elif ca.status == 'INVALID' %}
+                <span class="label label-danger">{{ca.status}}</span>
+                {% else %}
+                <span class="label label-info">{{ca.status}}</span>
+                {% endif %}
+                </small>
+            </h3>
+            <a class="btn btn-info" href="{% url 'show_certification_authority' pk=ca.id %}"><i class="fa fa-chevron-circle-right"></i> Details</a>
+            <a class="btn btn-danger" href="{% url 'delete_certification_authority' pk=ca.id %}"><i class="fa fa-trash"></i> Delete</a>
+        {% endfor %}
+        {% if object_list|length == 0 %}
+            <h2>No certification authorities created !</h2>
+            <p>You have no CA created, you should probably try to <a href="{% url 'create_certification_authority' %}">add one</a>
+            </p>
+        {% endif %}
+    </div>
+{% endblock body %}

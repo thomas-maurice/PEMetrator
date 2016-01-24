@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}All the users{% endblock title %}
+
+{% block body %}
+    <div class="col-md-10 col-md-offset-1">
+        <h1><i class="fa fa-user"></i> User list
+            {% if user.is_staff %}
+                <small><a class="btn btn-primary pull-right" href="{% url 'create_user' %}"><i class="fa fa-plus"></i> Create one</a></small>
+            {%endif%}
+        </h1>
+        {% for u in object_list %}
+            <h3>{{u.username}} <small><span class="label label-info">User</span></small>
+                {% if u.is_staff %}<small><span class="label label-warning">Staff</span></small>{% endif %}
+                {% if u.is_superuser %}<small><span class="label label-default">Superuser</span></small>{% endif %}
+            </h3>
+            <a class="btn btn-info" href="{% url 'show_user' pk=u.id %}"><i class="fa fa-chevron-circle-right"></i> Details</a>
+            {% if user.is_staff %}
+                <a class="btn btn-success" href="{% url 'update_user' pk=u.id %}"><i class="fa fa-pencil"></i> Edit</a>
+                <a class="btn btn-danger" href="{% url 'delete_user' pk=u.id %}"><i class="fa fa-trash"></i> Delete</a>
+            {%endif%}
+        {% endfor %}
+    </div>
+{% endblock body %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% load humanize %}
+
+{% block title %}Certificate - {{cert.certificate_request.common_name}}{% endblock title %}
+
+{% block body %}
+<div class="col-md-12">
+    <h1>{% if cert.certificate_request.server_certificate %}<i class="fa fa-server"></i>{% else %}<i class="fa fa-user"></i>{% endif %}
+        {{ cert.certificate_request.common_name }}
+        <small class="pull-right">
+            <span class="label label-warning">Expires : {{cert.expires_at|naturalday}}</span>
+        </small>
+        <small class='pull-right'>
+            {% if cert.status == 'VALID' %}
+            <span class="label label-success">{{cert.status}}</span>
+            {% elif cert.status == 'REVOKED' %}
+            <span class="label label-danger">{{cert.status}}</span>
+            {% else %}
+            <span class="label label-warning">{{cert.status}}</span>
+            {% endif %}
+            <a class="label label-info" href="{% url 'show_certificate_request' pk=cert.certificate_request.pk %}">View request</a>
+        </small>
+    </h1>
+        <span class="pull-right">
+            <a class="btn btn-info" href="{% url 'list_certificates' page=1 %}"><i class="fa fa-mail-reply"></i> Go back</a>
+        </span>
+        <br/>
+    <div>
+        <p>
+            Created {{cert.created_at|timesince}} ago,
+            key size: {{ cert.certificate_request.private_key_size}} bits.
+            Owned by <a href="{% url 'show_user' pk=cert.certificate_request.user.pk %}">
+                {{cert.certificate_request.user}}</a>
+        </p>
+        <div class="col-md-10 col-md-offset-1 text-center">
+            <h3>Certificate</h3>
+            <pre>
+{{ cert.certificate }}</pre>
+        </div>
+    </div>
+</div>
+{% endblock body %}
+
+{% block beforeend %}
+
+{% endblock beforeend %}

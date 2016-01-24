@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% load humanize %}
+
+{% block title %}Certification Authority - {{ca.common_name}}{% endblock title %}
+
+{% block body %}
+<div class="col-md-12">
+    <h1>{{ca.common_name}}
+        <small class='pull-right'>
+        {% if ca.status == 'VALID' %}
+        <span class="label label-success">{{ca.status}}</span>
+        {% elif ca.status == 'INVALID' %}
+        <span class="label label-danger">{{ca.status}}</span>
+        {% else %}
+        <span class="label label-info">{{ca.status}}</span>
+        {% endif %}
+        </small>
+    </h1>
+        <span class="pull-right">
+            <a class="btn btn-info" href="{% url 'list_certification_authorities' %}"><i class="fa fa-mail-reply"></i> Go back</a>
+        </span>
+        <br/>
+    <div>
+        <p>Created {{ca.created_at|timesince}} ago, key size: {{ ca.private_key_size}} bits</p>
+        {% if ca.status == "VALID" or ca.status == "INVALID" %}
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Certificate for this CA</h3>
+                <pre>
+{{ ca.certificate }}</pre>
+                <h3>Certificate revocation list</h3>
+                <pre>
+{{ ca.revocation_list }}</pre>
+            </div>
+            {% if user.is_staff %}
+            <div class="col-md-6">
+                <h3>Private key for the CA</h3>
+                <pre>
+{{ ca.private_key }}</pre>
+            </div>
+            {% endif %}
+        </div>
+        {% if user.is_staff %}
+        <h3>Certificate associated with this CA</h3>
+        {% for cert in ca.sslcertificate_set.all %}
+        <h4>
+            <p class='pull-right'>
+            {% if cert.status == 'VALID' %}
+                <span class="label label-success">{{cert.status}}</span>
+            {% elif cert.status == 'REVOKED' %}
+                <span class="label label-danger">{{cert.status}}</span>
+            {% else %}
+                <span class="label label-info">{{cert.status}}</span>
+            {% endif %}
+            </p>
+            <a class="btn btn-info" href="{% url 'show_certificate' pk=cert.id %}"><i class="fa fa-chevron-circle-right"></i> {{cert.certificate_request.common_name}}</a>
+        </h4>
+        {% endfor %}
+        {% endif %}
+        {% else %}
+        <h3>This CA is curently {{ ca.status }}, it should be generated soon.</h3>
+        {% endif %}
+    </div>
+</div>
+{% endblock body %}
+
+{% block beforeend %}
+
+{% endblock beforeend %}

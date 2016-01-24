@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% load humanize %}
+
+{% block title %}User - {{u.username}}{% endblock title %}
+
+{% block body %}
+<div class="col-md-12">
+    <h1>User {{u.username}}</h1><a href="/user/user" class="btn btn-info pull-right"><i class="fa fa-mail-reply"></i> Go back</a>
+    <div>
+        <p><span class="label label-info">User</span>
+            {% if u.is_staff %}<span class="label label-warning">Staff</span>{% endif %}
+            {% if u.is_superuser %}<span class="label label-default">Superuser</span>{% endif %}
+        <p>
+        <p>Joined {{u.date_joined|timesince}} ago, last logged in {{u.last_login|timesince}} ago</p>
+    </div>
+</div>
+{% endblock body %}
+
+{% block beforeend %}
+
+{% endblock beforeend %}

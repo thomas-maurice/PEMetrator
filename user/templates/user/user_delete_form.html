@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Delete a user{% endblock title %}
+
+{% block body %}
+    <div class="col-md-10 col-md-offset-1">
+        <h1>Delete the user {{u.username}} ?</h1>
+        <p>
+            You are about to delete the user "<em>{{u.username}}</em>". Are you
+            sure you want to perform this action ?
+        </p>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div style="text-align:center">
+                <button type="submit" value="Yes !" class="btn btn-success">Yes!</button>
+                <a href="{% url 'show_user' pk=user.id %}" class="btn btn-danger">No !</a>
+                <a href="/user/user" class="btn btn-info"><i class="fa fa-mail-reply"></i> Go back</a>
+            </div>
+        <form>
+    </div>
+{% endblock body %}

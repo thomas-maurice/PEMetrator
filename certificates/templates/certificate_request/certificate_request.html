@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% load humanize %}
+
+{% block title %}Certificate Request - {{csr.common_name}}{% endblock title %}
+
+{% block body %}
+<div class="col-md-12">
+    <h1>{% if csr.server_certificate %}<i class="fa fa-server"></i>{% else %}<i class="fa fa-user"></i>{% endif %}
+        {{csr.common_name}}
+        <small class='pull-right'>
+        {% if csr.status == 'SIGNED' %}
+        <span class="label label-success">{{csr.status}}</span>
+        <a class="label label-info" href="{% url 'show_certificate' pk=csr.signed_certificate.pk %}">View certificate</a>
+        {% elif csr.status == 'DECLINED' or csr.status == 'FAILED' %}
+        <span class="label label-danger">{{csr.status}}</span>
+        {% else %}
+        <span class="label label-warning">{{csr.status}}</span>
+        {% endif %}
+        </small>
+    </h1>
+        <span class="pull-right">
+            {% if user.is_staff %}
+            {% if csr.status == 'VALIDATING' or csr.status == 'FAILED' %}
+            <a class="btn btn-success" href="{% url 'sign_certificate_request' pk=csr.id %}"><i class="fa fa-pencil"></i> Sign request</a>
+            <a class="btn btn-danger" href="{% url 'decline_certificate_request' pk=csr.id %}"><i class="fa fa-ban"></i> Decline request</a>
+            {% endif %}
+            {% endif %}
+            <a class="btn btn-info" href="{% url 'list_certificate_requests' page=1 %}"><i class="fa fa-mail-reply"></i> Go back</a>
+        </span>
+        <br/>
+    <div>
+        <p>
+            Created {{csr.created_at|timesince}} ago, key size: {{ csr.private_key_size}} bits.
+            Requested by <a href="{% url 'show_user' pk=csr.user.pk %}">{{csr.user}}</a>
+        </p>
+        {% if csr.status != 'DECLINED' %}
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Certificate request</h3>
+                <pre>
+{{ csr.request }}</pre>
+            </div>
+            <div class="col-md-6">
+                <h3>Private key</h3>
+                <pre>
+{{ csr.private_key }}</pre>
+            </div>
+        </div>
+        {% else %}
+        <h3>This certificate request has been declined by an administrator.</h3>
+        {% endif %}
+    </div>
+</div>
+{% endblock body %}
+
+{% block beforeend %}
+
+{% endblock beforeend %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}CAs{% endblock title %}
+
+{% block body %}
+    <div class="col-md-10 col-md-offset-1">
+        <h1><i class="fa fa-certificate"></i> Certificates requests
+            <small>
+                <a class="btn btn-primary pull-right" href="{% url 'create_certificate_request' %}">
+                    <i class="fa fa-plus"></i> Request one</a>
+            </small>
+        </h1>
+        {% for csr in object_list %}
+            <h3>{% if csr.server_certificate %}<i class="fa fa-server"></i>{% else %}<i class="fa fa-user"></i>{% endif %}
+                {{csr.common_name}} -
+                <a href="{% url 'show_user' pk=csr.user.pk %}">{{csr.user}}</a>
+                <small class='pull-right'>
+                {% if csr.status == 'SIGNED' %}
+                <span class="label label-success">{{csr.status}}</span>
+                {% elif csr.status == 'DECLINED' or csr.status == 'FAILED' %}
+                <span class="label label-danger">{{csr.status}}</span>
+                {% else %}
+                <span class="label label-info">{{csr.status}}</span>
+                {% endif %}
+                </small>
+            </h3>
+            <a class="btn btn-info" href="{% url 'show_certificate_request' pk=csr.id %}"><i class="fa fa-chevron-circle-right"></i> Details</a>
+            {% if user.is_staff %}
+            {% if csr.status == 'VALIDATING' or csr.status == 'FAILED' %}
+            <a class="btn btn-success" href="{% url 'sign_certificate_request' pk=csr.id %}"><i class="fa fa-pencil"></i> Sign request</a>
+            <a class="btn btn-danger" href="{% url 'decline_certificate_request' pk=csr.id %}"><i class="fa fa-ban"></i> Decline request</a>
+            {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% if object_list|length == 0 %}
+            <h2>No certificates request created !</h2>
+            <p>
+                You have no certificates request created, if you need one you
+                should probably try to <a href="{% url 'create_certificate_request' %}">add one</a>
+            </p>
+        {% endif %}
+    </div>
+    {% if is_paginated %}
+    <div class="col-md-10 col-md-offset-1">
+        </hr>
+        <nav>
+            <ul class="pager">
+                {% if page_obj.has_previous %}
+                    <li><a href="{% url 'list_certificate_requests' page=page_obj.previous_page_number %}">Previous page</a></li>
+                {% endif %}
+                <li>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.<li>
+                {% if page_obj.has_next %}
+                    <li><a href="{% url 'list_certificate_requests' page=page_obj.next_page_number %}">Next page</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+{% endblock body %}

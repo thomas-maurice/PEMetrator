@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Update {{k.key_name}}{% endblock title %}
+
+{% load bootstrap %}
+
+{% block body %}
+    <div class="col-md-10 col-md-offset-1">
+        <h1 class="text-center">Update key {{k.key_name}}</h1>
+        <form method="post" action="" class="form-horizontal">
+            {% csrf_token %}
+            {{ form |bootstrap_horizontal }}
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <button type="submit" class="btn btn-block btn-primary">Update</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock body %}

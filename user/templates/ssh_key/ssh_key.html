@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% load humanize %}
+
+{% block title %}Key - {{k.key_name}}{% endblock title %}
+
+{% block body %}
+<div class="col-md-12">
+    <h1>Key {{k.key_name}}</h1>
+        <span class="pull-right">
+            <a class="btn btn-success" href="{% url 'update_ssh_key' pk=k.id %}"><i class="fa fa-pencil"></i> Edit</a>
+            <a class="btn btn-info" href="{% url 'list_ssh_key' %}"><i class="fa fa-mail-reply"></i> Go back</a>
+        </span>
+    <div>
+        <p>Created {{k.created_at|timesince}} ago, updated {{u.updated_at|timesince}} ago</p>
+        <ul>
+            <li>Type: {{ k.key_type }}</li>
+            <li>Size: {{ k.key_size}}</li>
+            <li>Fingerprint: {{ k.key_fingerprint }}
+        </ul>
+    </div>
+</div>
+{% endblock body %}
+
+{% block beforeend %}
+
+{% endblock beforeend %}

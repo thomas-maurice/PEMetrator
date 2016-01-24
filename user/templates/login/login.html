@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+{% block title %}Login{% endblock title %}
+
+{% block pageheader %}
+
+{% endblock pageheader %}
+
+{% block body %}
+    <div class="col-md-6 col-md-offset-3">
+        {% if user.is_authenticated %}
+            <h1 class="text-center">You are logged in as {{ user.username }} !<h1>
+            <hr/>
+            <a href="/login/logout" class="btn btn-block btn-lg btn-danger">I want to log out</a>
+        {% else %}
+            <h1 class="text-center">Please log in</h1>
+            <hr/>
+        {% endif %}
+        {% if error %}
+        <p><strong>Unkown user or bad password</strong></p>
+        {% endif %}
+        
+        {% if not user.is_authenticated %}
+        <form method="post" action="" class="form-horizontal">
+            {% csrf_token %}
+            {{ form |bootstrap_horizontal }}
+            <div class="form-group">
+                <div class="col-md-10 col-md-offset-2">
+                    <button type="submit" class="btn btn-block btn-primary">Login</button>
+                </div>
+            </div>
+        </form>
+        {% endif %}
+    </div>
+{% endblock body %}
+        

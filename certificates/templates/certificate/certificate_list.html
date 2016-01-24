@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Certificates{% endblock title %}
+
+{% block body %}
+    <div class="col-md-10 col-md-offset-1">
+        <h1><i class="fa fa-certificate"></i> Certificates
+            <small>
+                <a class="btn btn-primary pull-right" href="{% url 'create_certificate_request' %}">
+                    <i class="fa fa-plus"></i> Request one</a>
+            </small>
+        </h1>
+        {% for cert in object_list %}
+            <h3>{% if cert.certificate_request.server_certificate %}<i class="fa fa-server"></i>{% else %}<i class="fa fa-user"></i>{% endif %}
+                {{cert.certificate_request.common_name}} -
+                <a href="{% url 'show_user' pk=cert.certificate_request.user.pk %}">{{cert.certificate_request.user}}</a>
+                <small class='pull-right'>
+                {% if cert.status == 'VALID' %}
+                <span class="label label-success">{{cert.status}}</span>
+                {% elif cert.status == 'REVOKED' or cert.status == 'DECLINED' %}
+                <span class="label label-danger">{{cert.status}}</span>
+                {% else %}
+                <span class="label label-info">{{cert.status}}</span>
+                {% endif %}
+                </small>
+            </h3>
+            <a class="btn btn-info" href="{% url 'show_certificate' pk=cert.id %}"><i class="fa fa-chevron-circle-right"></i> Details</a>
+        {% endfor %}
+        {% if object_list|length == 0 %}
+            <h2>No certificates created !</h2>
+            <p>You have no certificates created, you should probably try to <a href="{% url 'create_certificate_request' %}">add one</a>
+            </p>
+        {% endif %}
+    </div>
+    {% if is_paginated %}
+    <div class="col-md-10 col-md-offset-1">
+        </hr>
+        <nav>
+            <ul class="pager">
+                {% if page_obj.has_previous %}
+                    <li><a href="{% url 'list_certificates' page=page_obj.previous_page_number %}">Previous page</a></li>
+                {% endif %}
+                <li>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.<li>
+                {% if page_obj.has_next %}
+                    <li><a href="{% url 'list_certificates' page=page_obj.next_page_number %}">Next page</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+{% endblock body %}

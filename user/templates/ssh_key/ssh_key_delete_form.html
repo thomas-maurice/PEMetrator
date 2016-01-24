@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Delete a SSH key{% endblock title %}
+
+{% block body %}
+    <div class="col-md-10 col-md-offset-1">
+        <h1>Delete the SSH key "{{k.key_name}}" ?</h1>
+        <p>
+            You are about to delete "<em>{{k.key_name}}</em>" {{ k.key_type }} {{ k.key_size }} bits-key . Are you
+            sure you want to perform this action ?
+        </p>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div style="text-align:center">
+                <button type="submit" value="Yes !" class="btn btn-success">Yes!</button>
+                <a href="{% url 'show_ssh_key' pk=k.id %}" class="btn btn-danger">No !</a>
+                <a href="{% url 'list_ssh_key' %}" class="btn btn-info"><i class="fa fa-mail-reply"></i> Go back</a>
+            </div>
+        <form>
+    </div>
+{% endblock body %}

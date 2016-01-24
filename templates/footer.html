@@ -1,0 +1,24 @@
+{% load cache %}
+
+{% cache 600 maintemplate.footer %}
+<div id="footer">
+    <div class="container" style="margin-top: 1em">
+        <div class="row">
+            <div class="col-md-3">
+                    <p class="text-muted text-center">&copy; 2014-2015 Thomas Maurice</br>
+                    <a href="https://twitter.com/thomas_maurice" target="_blank"><i class="fa fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com/profile/view?id=219116744" target="_blank"><i class="fa fa-linkedin"></i></a>
+                    <a href="https://github.com/thomas-maurice" target="_blank"><i class="fa fa-github"></i></a>
+            </div>
+            <div class="col-md-6">
+                <p class="text-center text-muted">This is a beta version. Build {% include 'commit.txt' %}</p>
+            </div>
+            <div class="col-md-3">
+              <p class="text-muted text-center">Powered by <a href="https://djngoproject.com" target="_blank">django</a>,
+              <a href="http://getbootstrap.com" target="_blank">Bootstrap</a> and
+              <a href="https://fortawesome.github.io/Font-Awesome/" target="_blank">Font awesome</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endcache %}

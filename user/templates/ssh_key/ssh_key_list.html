@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}My SSH keys{% endblock title %}
+
+{% block body %}
+    <div class="col-md-10 col-md-offset-1">
+        <h1><i class="fa fa-key"></i> My SSH keys
+            <small>
+                <a class="btn btn-primary pull-right" href="{% url 'create_ssh_key' %}">
+                <i class="fa fa-plus"></i> Add one</a>
+            </small>
+        </h1>
+        {% for k in object_list %}
+            <h3>{{k.key_name}}
+                    <small>
+                        <span class="label label-success">{{k.key_type}}</span>
+                        <span class="label label-warning">{{k.key_size}} bits</span>
+                        <span class="label label-info">{{k.key_fingerprint}}</span>
+                    </small>
+            </h3>
+            <a class="btn btn-info" href="{% url 'show_ssh_key' pk=k.id %}"><i class="fa fa-chevron-circle-right"></i> Details</a>
+            <a class="btn btn-success" href="{% url 'update_ssh_key' pk=k.id %}"><i class="fa fa-pencil"></i> Edit</a>
+            <a class="btn btn-danger" href="{% url 'delete_ssh_key' pk=k.id %}"><i class="fa fa-trash"></i> Delete</a>
+        {% endfor %}
+        {% if object_list|length == 0 %}
+            <h2>No SSH keys registered !</h2>
+            <p>You have no ssh keys registered, you should probably try to <a href="{% url 'create_ssh_key' %}">add one</a>
+            </p>
+        {% endif %}
+    </div>
+{% endblock body %}
