@@ -163,6 +163,10 @@ celery_app.conf.update(CELERYBEAT_SCHEDULE={
         'task': 'certificates.tasks.cleanups.check_expired_certificates',
         'schedule': timedelta(seconds=60),
     },
+    'remove-revoked-expired-certificates': {
+        'task': 'certificates.tasks.cleanups.remove_expired_revoked',
+        'schedule': timedelta(seconds=60),
+    },
 })
 
 # Email configuration
