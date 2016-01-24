@@ -14,7 +14,7 @@
         <small class='pull-right'>
             {% if cert.status == 'VALID' %}
             <span class="label label-success">{{cert.status}}</span>
-            {% elif cert.status == 'REVOKED' %}
+            {% elif cert.status == 'REVOKED' or cert.status == 'EXPIRED' %}
             <span class="label label-danger">{{cert.status}}</span>
             {% else %}
             <span class="label label-warning">{{cert.status}}</span>
@@ -23,6 +23,9 @@
         </small>
     </h1>
         <span class="pull-right">
+            {% if user.is_staff and cert.status == 'VALID' %}
+            <a class="btn btn-danger" href="{% url 'revoke_certificate' pk=cert.id %}"><i class="fa fa-bomb"></i> Revoke</a>
+            {% endif %}
             <a class="btn btn-info" href="{% url 'list_certificates' page=1 %}"><i class="fa fa-mail-reply"></i> Go back</a>
         </span>
         <br/>
@@ -31,7 +34,9 @@
             Created {{cert.created_at|timesince}} ago,
             key size: {{ cert.certificate_request.private_key_size}} bits.
             Owned by <a href="{% url 'show_user' pk=cert.certificate_request.user.pk %}">
-                {{cert.certificate_request.user}}</a>
+                {{cert.certificate_request.user}}</a>.
+            This certificate was signed by <a href="{% url 'show_certification_authority' pk=cert.certification_authority.pk %}">
+                {{cert.certification_authority.common_name}}</a>
         </p>
         <div class="col-md-10 col-md-offset-1 text-center">
             <h3>Certificate</h3>

@@ -154,13 +154,16 @@ CELERY_TASK_RESULT_EXPIRES = 3600
 CELERY_TIMEZONE = 'Europe/Paris'
 CELERY_TIMEZONE = 'UTC'
 
-# Celery beat
-CELERYBEAT_SCHEDULE = {
+celery_app.conf.update(CELERYBEAT_SCHEDULE={
     'djmail-retry-send-every-120-seconds': {
         'task': 'tasks.retry_send_messages',
-        'schedule': timedelta(seconds=120),
+        'schedule': timedelta(seconds=600),
     },
-}
+    'cleanup-expired-certificates': {
+        'task': 'certificates.tasks.cleanups.check_expired_certificates',
+        'schedule': timedelta(seconds=60),
+    },
+})
 
 # Email configuration
 DJMAIL_MAX_RETRY_NUMBER = 30

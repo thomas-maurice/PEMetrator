@@ -53,6 +53,7 @@ class SSLCertificate(models.Model):
             ('CREATING', 'Creating'),
             ('VALID', 'Valid'),
             ('REVOKED', 'Revoked'),
+            ('EXPIRED', 'Expired')
         ),
         default="CREATING",
         blank=True,

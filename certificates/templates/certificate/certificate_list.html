@@ -17,7 +17,7 @@
                 <small class='pull-right'>
                 {% if cert.status == 'VALID' %}
                 <span class="label label-success">{{cert.status}}</span>
-                {% elif cert.status == 'REVOKED' or cert.status == 'DECLINED' %}
+                {% elif cert.status == 'REVOKED' or cert.status == 'EXPIRED' %}
                 <span class="label label-danger">{{cert.status}}</span>
                 {% else %}
                 <span class="label label-info">{{cert.status}}</span>
@@ -25,6 +25,9 @@
                 </small>
             </h3>
             <a class="btn btn-info" href="{% url 'show_certificate' pk=cert.id %}"><i class="fa fa-chevron-circle-right"></i> Details</a>
+            {% if user.is_staff and cert.status == 'VALID' %}
+            <a class="btn btn-danger" href="{% url 'revoke_certificate' pk=cert.id %}"><i class="fa fa-bomb"></i> Revoke</a>
+            {% endif %}
         {% endfor %}
         {% if object_list|length == 0 %}
             <h2>No certificates created !</h2>

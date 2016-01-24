@@ -9,6 +9,7 @@ from celery.utils.log import get_task_logger
 from  celery import shared_task
 import datetime
 import time
+import pytz
 
 logger = get_task_logger(__name__)
 
@@ -29,7 +30,7 @@ def regenerate_certificate_revocation_list(self, certification_authority):
         revoked_cert = x509.RevokedCertificateBuilder().serial_number(
             certificate.serial_number
         ).revocation_date(
-            datetime.datetime.today()
+            certificate.revocation_date.replace(tzinfo=None)
         ).build(default_backend())
 
         builder = builder.add_revoked_certificate(revoked_cert)
