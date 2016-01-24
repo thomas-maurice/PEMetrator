@@ -41,3 +41,19 @@ def check_expired_certificates(self):
         )
         certificate.status = "EXPIRED"
         certificate.save()
+
+@shared_task(bind=True)
+def remove_expired_revoked(self):
+    logger.info('Warning checking for certificates to remove')
+    to_remove = SSLCertificate.objects.filter(
+        Q(status="EXPIRED") | Q(status='REVOKED')
+    )
+    for certificate in to_remove:
+        logger.warn(
+            "Removing certificate %s, serial 0x%x because it is %s" % (
+                certificate.certificate_request.common_name,
+                certificate.serial_number,
+                certificate.status
+            )
+        )
+        certificate.delete()

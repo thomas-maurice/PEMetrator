@@ -29,8 +29,9 @@ for country in list(pycountry.countries):
 class SSLCertificateRequest(models.Model):
     certification_authority = models.ForeignKey(
         SSLCertificationAuthority,
-        on_delete=models.CASCADE,
-        help_text="The certification authority you want your certificate signed by"
+        on_delete=models.SET_NULL,
+        help_text="The certification authority you want your certificate signed by",
+        null=True
     )
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,

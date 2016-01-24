@@ -30,9 +30,15 @@ for country in list(pycountry.countries):
 class SSLCertificate(models.Model):
     certificate_request = models.OneToOneField(
         SSLCertificateRequest,
-        on_delete=models.CASCADE,
         help_text="The corresponding request",
-        related_name='signed_certificate'
+        related_name='signed_certificate',
+        on_delete=models.SET_NULL,
+        null=True
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        help_text="User owning the certificate"
     )
     certification_authority = models.ForeignKey(
         SSLCertificationAuthority,

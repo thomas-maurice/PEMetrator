@@ -69,7 +69,8 @@ def sign_certificate_request(self, csr):
         certification_authority=csr.certification_authority,
         certificate = signed_cert_str,
         expires_at = datetime.datetime.today() + datetime.timedelta(days=365),
-        status = "VALID"
+        status = "VALID",
+        user=csr.user
     )
     signed_cert.save()
     csr.status = "SIGNED"
