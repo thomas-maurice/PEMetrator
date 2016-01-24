@@ -1,12 +1,16 @@
 # PEMetrator
 OpenVPN PKI management web application.
 
+PEMetrator is funny because PEM is a certificate file format. :)
+
 ## What is this project about ?
 Have you ever tried to setup a [PKI](https://en.wikipedia.org/wiki/Public_key_infrastructure) to use with [OpenVPN](https://openvpn.net/) ?
 
 As the documentation suggests you might have used easy-rsa to manage your keys and certificates. But this solution is quite unsatisfying in the way that it requires you to SSH on the server to perform actions, and there is no easy way for the users of your VPN to request or revoke a certificate for instance.
 
 This is what this project is about: *make the use of OpenVPN PKI easy for everyone.*
+
+![certificate](images/certificate.png)
 
 ## What does this project allow you to do ?
 ### Disclaimer
@@ -25,17 +29,23 @@ A CA possesses three important attributes :
 
 All these components (except the private key obviously!) are freely accessible to the clients so that they can configure their VPN accesses.
 
+![certificate_authority](images/certification_authority.png)
+
 ### Create certificate requests
 This enables the users to request certificates.
 
 An administrator then has to sign them to make them
 valid.
 
+![certificate_request](images/certificate_request.png)
+
 ### Revoke certificates
 A certificate can be revoked at any time by an administrator. The CRL is available to anyone.
 
 ### Create client and server certificate
 Both of them are supported :)
+
+![certificates](images/certificates.png)
 
 ### Email notifications
 When you create a certificate request, and when it
