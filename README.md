@@ -53,7 +53,7 @@ To test the application please download this repo, create the appropriate databa
 
 Run the following commands :
 ```bash
-$ sudo service redis star # Mandatory for Celery
+$ sudo service redis start # Mandatory for Celery
 $ pip install -r requirements.txt # Install deps
 $ python manage.py migrate
 $ python manage.py createsuperuser
