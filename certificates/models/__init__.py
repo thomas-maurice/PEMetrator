@@ -30,7 +30,11 @@ def SSLCertificate_pre_delete(sender, instance, **kwargs):
                 reason="CESSATION_OF_OPERATION",
             )
             revoked.save()
+
+def SSLCertificate_post_delete(sender, instance, **kwargs):
+    """Hook to ensure that when a certificate is deleted, the linked CSR is too"""
     logging.warn("Removing the corresponding certificate request %s" % instance.certificate_request.common_name)
     instance.certificate_request.delete()
 
 signals.pre_delete.connect(SSLCertificate_pre_delete, sender=SSLCertificate)
+signals.post_delete.connect(SSLCertificate_post_delete, sender=SSLCertificate)

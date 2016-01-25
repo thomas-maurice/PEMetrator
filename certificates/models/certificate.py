@@ -32,7 +32,7 @@ class SSLCertificate(models.Model):
         SSLCertificateRequest,
         help_text="The corresponding request",
         related_name='signed_certificate',
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True
     )
     user = models.ForeignKey(
